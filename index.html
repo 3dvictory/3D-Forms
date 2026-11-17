@@ -166,6 +166,96 @@
     aspect-ratio:1.1; display:grid; place-items:center;
   }
 
+  /* ---------- Modal de presentación (recogida de botellas) ---------- */
+  .pres-modal{
+    display:none;
+    position:fixed; inset:0; z-index:200;
+    background:var(--surface, #f4f7f6);
+    padding:24px;
+    align-items:center; justify-content:center;
+  }
+  .pres-modal.open{display:flex;}
+  .pres-deck{position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center;}
+  .pres-slide{
+    position:absolute; inset:0; display:none;
+    align-items:center; justify-content:center; padding:32px;
+  }
+  .pres-slide.pres-active{display:flex;}
+  .pres-card{
+    background:#fff; border:1px solid var(--border);
+    border-radius:20px; max-width:640px; width:100%;
+    padding:44px 38px; box-shadow:0 8px 30px rgba(0,0,0,.08);
+    max-height:100%; overflow-y:auto;
+  }
+  .pres-title-slide .pres-card{text-align:center;}
+  .pres-icon{
+    width:64px; height:64px; border-radius:16px;
+    background:var(--accent-2); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:30px; margin:0 auto 18px;
+  }
+  .pres-h1{font-family:'Unbounded','Inter',sans-serif; font-size:clamp(24px,4vw,36px); margin:0 0 12px; color:var(--accent-2);}
+  .pres-h2{font-family:'Unbounded','Inter',sans-serif; font-size:clamp(19px,3.4vw,25px); margin:0 0 18px; color:var(--ink);}
+  .pres-p{color:var(--ink-soft); line-height:1.6; font-size:15.5px; margin:0 0 8px;}
+  .pres-thanks{margin-top:22px; color:var(--accent-2); font-weight:700;}
+  .pres-tag{
+    display:inline-block; background:var(--accent-2); color:#fff;
+    font-size:12.5px; font-weight:700; padding:4px 12px;
+    border-radius:999px; margin-bottom:16px;
+  }
+  .pres-ul{margin:0; padding-left:20px; color:var(--ink-soft);}
+  .pres-ul li{margin-bottom:9px; line-height:1.5; font-size:15px;}
+  .pres-icon-row{display:flex; gap:14px; margin:14px 0 18px;}
+  .pres-step{
+    width:48px; height:48px; border-radius:14px; background:var(--highlight);
+    color:var(--ink); font-weight:700; font-size:20px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pres-close{
+    position:fixed; top:calc(18px + env(safe-area-inset-top,0px)); right:18px;
+    z-index:210; width:40px; height:40px; border-radius:50%;
+    background:#fff; border:1px solid var(--border); font-size:22px;
+    display:flex; align-items:center; justify-content:center; color:var(--ink);
+  }
+  .pres-counter{
+    position:fixed; top:calc(18px + env(safe-area-inset-top,0px)); left:18px;
+    z-index:210; font-size:13px; color:var(--ink-soft);
+    background:#fff; border:1px solid var(--border); padding:4px 12px; border-radius:999px;
+  }
+  .pres-nav{
+    position:fixed; bottom:calc(20px + env(safe-area-inset-bottom,0px)); left:0; right:0;
+    z-index:210; display:flex; align-items:center; justify-content:center; gap:14px;
+  }
+  .pres-nav button{
+    width:40px; height:40px; border-radius:50%; background:#fff;
+    border:1px solid var(--border); color:var(--ink); font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .pres-nav button:disabled{opacity:.35; cursor:default;}
+  .pres-dots{display:flex; gap:6px;}
+  .pres-dot{width:8px; height:8px; border-radius:50%; background:var(--border); cursor:pointer;}
+  .pres-dot.pres-active{background:var(--accent-2);}
+
+  /* ---------- Eco banner (recogida de botellas) ---------- */
+  .eco-banner{
+    background:var(--surface-2);
+    border-bottom:1px solid var(--border);
+  }
+  .eco-banner-inner{
+    display:flex; align-items:center; gap:40px; flex-wrap:wrap;
+    padding-top:64px; padding-bottom:64px;
+  }
+  .eco-icon-wrap{
+    flex:0 0 auto; width:120px; height:120px; border-radius:50%;
+    background:#fff; border:3px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:56px;
+  }
+  .eco-text{flex:1; min-width:260px;}
+  .eco-text h3{font-size:clamp(26px,4vw,38px); margin-bottom:12px;}
+  .eco-text p{margin:0; font-size:18px; color:var(--ink-soft); max-width:60ch;}
+  .eco-btn{flex:0 0 auto; padding:16px 32px; font-size:17px;}
+
   /* ---------- Layout: filters + grid ---------- */
   main{padding:40px 0 80px;}
   .layout{display:grid; grid-template-columns:220px 1fr; gap:32px; align-items:start;}
@@ -481,6 +571,17 @@
         <polygon points="230,80 230,180 130,240 130,140" fill="#0F8A7D"/>
       </svg>
     </div>
+  </div>
+</section>
+
+<section class="eco-banner">
+  <div class="wrap eco-banner-inner">
+    <div class="eco-icon-wrap">♻️</div>
+    <div class="eco-text">
+      <h3>Recogida de botellas de plástico</h3>
+      <p>Nos unimos al reciclaje: colabora con nuestra iniciativa de recogida y dale una segunda vida al plástico.</p>
+    </div>
+    <button type="button" class="btn secondary eco-btn" id="openPresentationBtn">Ver presentación</button>
   </div>
 </section>
 
@@ -1066,9 +1167,152 @@ document.getElementById('filterToggle').addEventListener('click', ()=>{
   document.getElementById('filtersPanel').classList.toggle('open');
 });
 
+/* ============ PRESENTACIÓN (recogida de botellas) ============ */
+(function(){
+  const modal = document.getElementById('presentationModal');
+  const slides = modal.querySelectorAll('.pres-slide');
+  const total = slides.length;
+  let idx = 0;
+  const dotsEl = document.getElementById('presDots');
+  const curEl = document.getElementById('presCur');
+  const totEl = document.getElementById('presTot');
+  const prevBtn = document.getElementById('presPrev');
+  const nextBtn = document.getElementById('presNext');
+  totEl.textContent = total;
+
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className = 'pres-dot' + (i===0?' pres-active':'');
+    d.addEventListener('click', ()=>{ idx=i; render(); });
+    dotsEl.appendChild(d);
+  }
+
+  function render(){
+    slides.forEach((s,i)=> s.classList.toggle('pres-active', i===idx));
+    dotsEl.querySelectorAll('.pres-dot').forEach((d,i)=> d.classList.toggle('pres-active', i===idx));
+    curEl.textContent = idx+1;
+    prevBtn.disabled = idx===0;
+    nextBtn.disabled = idx===total-1;
+  }
+
+  function go(dir){
+    const n = idx+dir;
+    if(n>=0 && n<total){ idx=n; render(); }
+  }
+
+  function openPresentation(){
+    idx = 0;
+    render();
+    modal.classList.add('open');
+  }
+  function closePresentation(){
+    modal.classList.remove('open');
+  }
+
+  document.getElementById('openPresentationBtn').addEventListener('click', openPresentation);
+  document.getElementById('presentationCloseBtn').addEventListener('click', closePresentation);
+  prevBtn.addEventListener('click', ()=>go(-1));
+  nextBtn.addEventListener('click', ()=>go(1));
+
+  document.addEventListener('keydown', (e)=>{
+    if(!modal.classList.contains('open')) return;
+    if(e.key==='ArrowRight') go(1);
+    if(e.key==='ArrowLeft') go(-1);
+    if(e.key==='Escape') closePresentation();
+  });
+
+  render();
+})();
+
 /* ============ INICIO ============ */
 renderGrid();
 renderCart();
 </script>
+<div class="pres-modal" id="presentationModal">
+  <button type="button" class="pres-close" id="presentationCloseBtn" aria-label="Cerrar presentación">&times;</button>
+  <div class="pres-counter"><span id="presCur">1</span> / <span id="presTot">6</span></div>
+
+  <div class="pres-deck">
+
+    <div class="pres-slide pres-active pres-title-slide">
+      <div class="pres-card">
+        <div class="pres-icon">♻️</div>
+        <h1 class="pres-h1">Recogida de Botellas de Plástico</h1>
+        <p class="pres-p">Una iniciativa para reducir residuos y cuidar nuestro entorno</p>
+      </div>
+    </div>
+
+    <div class="pres-slide">
+      <div class="pres-card">
+        <span class="pres-tag">El problema</span>
+        <h2 class="pres-h2">Demasiado plástico, muy pocos puntos de reciclaje</h2>
+        <ul class="pres-ul">
+          <li>Millones de botellas se desechan cada día y acaban en vertederos, ríos y mares.</li>
+          <li>Una botella de plástico puede tardar más de 400 años en descomponerse.</li>
+          <li>Gran parte de ese material se podría reutilizar si se recogiera correctamente.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pres-slide">
+      <div class="pres-card">
+        <span class="pres-tag">Nuestro objetivo</span>
+        <h2 class="pres-h2">Recoger, clasificar y reciclar</h2>
+        <p class="pres-p">Organizar puntos de recogida accesibles para que cualquier persona pueda depositar sus botellas de plástico de forma sencilla.</p>
+        <ul class="pres-ul">
+          <li>Reducir la contaminación en nuestra zona.</li>
+          <li>Fomentar el hábito del reciclaje entre vecinos y comercios.</li>
+          <li>Dar una segunda vida al plástico recogido.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pres-slide">
+      <div class="pres-card">
+        <span class="pres-tag">Cómo funciona</span>
+        <h2 class="pres-h2">Un proceso sencillo en 3 pasos</h2>
+        <div class="pres-icon-row">
+          <div class="pres-step">1</div>
+          <div class="pres-step">2</div>
+          <div class="pres-step">3</div>
+        </div>
+        <ul class="pres-ul">
+          <li><strong>Deposita</strong> tus botellas vacías en los puntos habilitados.</li>
+          <li><strong>Clasificamos</strong> el material por tipo de plástico.</li>
+          <li><strong>Enviamos</strong> las botellas a plantas de reciclaje autorizadas.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pres-slide">
+      <div class="pres-card">
+        <span class="pres-tag">Beneficios</span>
+        <h2 class="pres-h2">¿Por qué participar?</h2>
+        <ul class="pres-ul">
+          <li>Menos residuos en calles y espacios naturales.</li>
+          <li>Ahorro de recursos y energía frente a fabricar plástico nuevo.</li>
+          <li>Una comunidad más consciente y comprometida con el medio ambiente.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pres-slide">
+      <div class="pres-card">
+        <span class="pres-tag">Únete</span>
+        <h2 class="pres-h2">¡Cada botella cuenta!</h2>
+        <p class="pres-p">Localiza tu punto de recogida más cercano y empieza a reciclar hoy mismo.</p>
+        <p class="pres-thanks">Gracias por tu colaboración 🌱</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="pres-nav">
+    <button type="button" id="presPrev" aria-label="Anterior">‹</button>
+    <div class="pres-dots" id="presDots"></div>
+    <button type="button" id="presNext" aria-label="Siguiente">›</button>
+  </div>
+</div>
+
 </body>
 </html>
