@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pageshttps://github.com/3dvictory/3D-Forms/agents?author=3dvictory
+name: Deploy static content to Pages
 
 on:
   # Runs on pushes targeting the default branch
